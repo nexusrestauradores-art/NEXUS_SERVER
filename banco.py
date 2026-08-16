@@ -1,3 +1,5 @@
+import os
+
 from sqlalchemy import (
     create_engine,
     Column,
@@ -8,7 +10,6 @@ from sqlalchemy import (
 )
 
 from sqlalchemy.orm import declarative_base, sessionmaker
-
 from datetime import datetime
 
 
@@ -16,14 +17,26 @@ from datetime import datetime
 # CONFIGURAÇÃO DO BANCO
 # =====================================
 
-DATABASE = "sqlite:///nexus_clientes.db"
+DATABASE = os.getenv("DATABASE_URL")
+
+
+if not DATABASE:
+    raise Exception(
+        "DATABASE_URL não configurada no servidor."
+    )
+
+
+# Ajuste necessário para PostgreSQL no Render
+if DATABASE.startswith("postgres://"):
+    DATABASE = DATABASE.replace(
+        "postgres://",
+        "postgresql://",
+        1
+    )
 
 
 engine = create_engine(
-    DATABASE,
-    connect_args={
-        "check_same_thread": False
-    }
+    DATABASE
 )
 
 
@@ -33,7 +46,6 @@ Session = sessionmaker(
 
 
 Base = declarative_base()
-
 
 
 # =====================================
@@ -139,5 +151,6 @@ Base.metadata.create_all(
 
 
 print(
-    "Banco NEXUS atualizado com sucesso!"
+    "Banco NEXUS PostgreSQL atualizado com sucesso!"
+)
 )
