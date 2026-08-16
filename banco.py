@@ -22,11 +22,10 @@ DATABASE = os.getenv("DATABASE_URL")
 
 if not DATABASE:
     raise Exception(
-        "DATABASE_URL não configurada no servidor."
+        "DATABASE_URL não configurada no Render"
     )
 
 
-# Ajuste necessário para PostgreSQL no Render
 if DATABASE.startswith("postgres://"):
     DATABASE = DATABASE.replace(
         "postgres://",
@@ -49,58 +48,49 @@ Base = declarative_base()
 
 
 # =====================================
-# TABELA DE CLIENTES
+# TABELA CLIENTES
 # =====================================
 
 class Cliente(Base):
 
     __tablename__ = "clientes"
 
-
     id = Column(
         Integer,
         primary_key=True
     )
 
-
     nome_cliente = Column(
         String
     )
-
 
     licenca = Column(
         String,
         unique=True
     )
 
-
     id_maquina = Column(
         String,
         unique=True
     )
 
-
     pc_id = Column(
         String
     )
 
-
     nome_pc = Column(
         String
     )
-
 
     ativo = Column(
         Boolean,
         default=True
     )
 
-
     data_cadastro = Column(
         DateTime,
         default=datetime.now
     )
-
 
     ultimo_acesso = Column(
         DateTime,
@@ -108,37 +98,31 @@ class Cliente(Base):
     )
 
 
-
 # =====================================
-# TABELA DE EVENTOS
+# TABELA EVENTOS
 # =====================================
 
 class Evento(Base):
 
     __tablename__ = "eventos"
 
-
     id = Column(
         Integer,
         primary_key=True
     )
 
-
     cliente = Column(
         String
     )
-
 
     tipo_evento = Column(
         String
     )
 
-
     data_hora = Column(
         DateTime,
         default=datetime.now
     )
-
 
 
 # =====================================
@@ -151,6 +135,5 @@ Base.metadata.create_all(
 
 
 print(
-    "Banco NEXUS PostgreSQL atualizado com sucesso!"
-)
+    "Banco NEXUS PostgreSQL conectado!"
 )
